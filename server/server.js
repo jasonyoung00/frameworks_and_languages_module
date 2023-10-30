@@ -1,10 +1,10 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 8000
-//const cors = require('cors')
 
 app.use(express.json())
-//app.use(cors())
+app.use(cors())
 
 app.get('/', (req, res) => {
   res.send('Server Working!')
@@ -38,10 +38,10 @@ app.post('/item', (req, res) => {
   else
   {
     const date_from = new Date().toISOString();
-    const unique_Num = Math.random();
-    
-    req.body.id = unique_Num
     req.body['fromDate'] = date_from
+
+    const unique_Num = Math.random();
+    req.body.id = unique_Num
     req.body['id'] = unique_Num;
 
     items.push(req.body)
@@ -55,22 +55,18 @@ app.get('/items', (req, res) => {
   console.log("GET items")
 })
 
-app.get('/item/:itemId', (req, res) => {
-  const itemId = parseFloat(req.params.itemId);
-  const itemSearched = items.find(itemSearched => itemSearched.itemId === itemId)
-
-  if(!itemSearched)
+app.get('/item/:id', (req, res) => {
+  for (let i of items)
   {
-    console.log("404 Not Found");
-    res.status(404).json('Failed Search');
+    if (i.id == req.params.id)
+    {
+      return res.status(200).json(i)
+    }
   }
-
-  console.log("User Not Found" + itemSearched);
-  res.status(200).json(itemSearched);
-  return;
+  return res.status(404).json({message: "Not Found"});
 })
 
-app.delete('item/:itemId', (req, res) => {
+app.delete('item/:id', (req, res) => {
   const itemId = parseFloat(req.params.itemId);
   const itemIndex = items.findIndex(item => item.itemId === itemId);
 
