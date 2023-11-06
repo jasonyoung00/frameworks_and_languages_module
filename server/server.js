@@ -37,16 +37,17 @@ app.post('/item', (req, res) => {
   }
   else
   {
-    const date_from = new Date().toISOString();
-    req.body['fromDate'] = date_from
-
+    const date_Curr = new Date().toISOString();
     const unique_Num = Math.random();
-    req.body.id = unique_Num
+
+    req.body.id = unique_Num;
+    req.body['date_from'] = date_Curr;
     req.body['id'] = unique_Num;
+    
 
     items.push(req.body)
-    res.status(201).json()
     console.log("201 Created")
+    return res.status(201).json(req.body)
   }
 })
 
@@ -60,23 +61,28 @@ app.get('/item/:id', (req, res) => {
   {
     if (i.id == req.params.id)
     {
+      console.log("GET item")
       return res.status(200).json(i)
     }
   }
   return res.status(404).json({message: "Not Found"});
 })
 
-app.delete('item/:id', (req, res) => {
-  const itemId = parseFloat(req.params.itemId);
-  const itemIndex = items.findIndex(item => item.itemId === itemId);
+app.delete('/item/:id', (req, res) => {
 
-  if (itemIndex === -1) {
+  const itemId = parseFloat(req.params.id);
+  const itemIndex = items.findIndex(item => item.id === itemId);
+
+  if (itemIndex === -1) 
+  {
     return res.status(404).json({message: 'Item Not Found'});
   }
-
-  items.splice(itemIndex, -1);
-  console.log("204 No Content: " + itemId);
-  res.status(204).json
+  else
+  {
+    items.splice(itemIndex, 1)
+    console.log("204 No Content")
+    return res.status(204).json();
+  }
 })
 
 app.listen(port, () => {
