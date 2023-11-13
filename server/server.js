@@ -7,8 +7,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('Server Working!')
-  res.status(200)
+  res.sendFile('client.html', {root: __dirname})
   console.log("200 OK");
 })
 
