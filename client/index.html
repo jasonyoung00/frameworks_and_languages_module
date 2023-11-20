@@ -26,6 +26,7 @@
     <input name="keywords" placeholder="keywords">
     <textarea name="description" placeholder="description"></textarea>
     <button data-action="create_item">Create Item</button>
+    <form @submit.prevent="onSubmit"></form>
 </form>
 
 <h2>Items</h2>
@@ -45,7 +46,8 @@
 
   createApp({
     setup() {
-      const message = ref('Client')
+      const message = ref('Hello Vue')
+      
       return {
         message
       }

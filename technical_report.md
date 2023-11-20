@@ -13,7 +13,31 @@ Critique of Server/Client prototype
 ### (name of Issue 1)
 
 (A code snippet example demonstrating the issue)
+
+```javascript
+let items =
+[
+  {
+    "id": 0,
+    "user_id": "user1234",
+    "keywords": [
+      "hammer",
+      "nails",
+      "tools"
+    ],
+    "description": "A hammer and nails set",
+    "image": "https://placekitten.com/200/300",
+    "lat": 51.2798438,
+    "lon": 1.0830275,
+    "date_from": "2023-10-23T13:13:05.200Z",
+    "date_to": "2023-10-23T13:13:05.200Z"
+  }
+]
+```
+
 (Explain why this pattern is problematic - 40ish words)
+
+Instead of having the items in a list, put them in a dictionary. A dictionary stores every entry with a key and a value. This makes searching for a single value much more efficient as all the entries in that dictionary is indexed. Whereas with a list, the entires are not indexed making the searching process much resource intensive.
 
 ### (name of Issue 2)
 
