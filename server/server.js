@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.sendFile('client.html', {root: __dirname})
+  res.sendFile('serverClient.html', {root: __dirname})
   console.log("200 OK");
 })
 
