@@ -3,12 +3,16 @@ const cors = require('cors')
 const app = express()
 const port = 8000
 
+
 app.use(express.json())
 app.use(cors())
 
+
 app.get('/', (req, res) => {
-  res.sendFile('serverClient.html', {root: __dirname})
-  console.log("200 OK");
+  //res.send('Server Working!')
+  res.sendFile('client.html', {root: __dirname})
+  res.status(200)
+  //console.log("200 OK");
 })
 
 /*var items = {
@@ -43,30 +47,44 @@ let items =
 ]
 
 app.post('/item', (req, res) => {
-  if (Object.keys(req.body).toString() != "user_id,keywords,description,lat,lon") {
-    return res.status(405).json({"message": "Missing Input Fields"})
+  const date_from = new Date().toISOString();
+  const date_to = new Date().toISOString();
+
+  if (!data.user_id || !data.keywords || !data.description || !data.lat || !data.lon)
+
+  {
+    console.log("405 Method Not Allowed")
+    res.status(405).json({ error: "Missing Fields" });
   }
   else
   {
-    const date_Curr = new Date().toISOString();
-    const unique_Num = Math.random();
+    req.body['Date_From'] = date_from;
+    req.body['Date_To'] = date_to;
 
-    req.body.id = unique_Num;
-    req.body['date_from'] = date_Curr;
-    req.body['id'] = unique_Num;
-    
+    const inputFields = 
+    {
+      "id": Math.floor(Math.random()*100),
+      "user_id": req.body.user_id,
+      "keywords": req.body.keywords,
+      "description": req.body.description,
+      "image": req.body.image,
+      "lat": req.body.lat,
+      "lon": req.body.lon,
+      "date_from": req.body['Date_From'],
+      "date_to": req.body['Date_To'],
+    };
 
-    items.push(req.body)
-    console.log("201 Created")
-    return res.status(201).json(req.body)
-  }
+    items.push(inputFields)
+    console.log("200 OK")
+    return res.status(201).json(inputFields)
+  }
 })
+
 
 app.get('/items', (req, res) => {
   res.json(items)
   console.log("GET items")
 })
-
 app.get('/item/:id', (req, res) => {
   for (let i of items)
   {
@@ -78,12 +96,9 @@ app.get('/item/:id', (req, res) => {
   }
   return res.status(404).json({message: "Not Found"});
 })
-
 app.delete('/item/:id', (req, res) => {
-
   const itemId = parseFloat(req.params.id);
   const itemIndex = items.findIndex(item => item.id === itemId);
-
   if (itemIndex === -1) 
   {
     return res.status(404).json({message: 'Item Not Found'});
@@ -95,9 +110,7 @@ app.delete('/item/:id', (req, res) => {
     return res.status(204).json();
   }
 })
-
 app.listen(port, () => {
   console.log(`server.js listening on port ${port}`)
 })
-
 process.on('SIGINT', function() {process.exit()})

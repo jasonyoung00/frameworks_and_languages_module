@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <nav class="navbar navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand fs-1" >
+          Freecycle
+        </a>
+      </div>
+    </nav>
+
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script type="importmap">
+    {
+      "imports": {
+      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+  </script>
+
+  <div id="app">
+    <!--{{ message }}-->
+    <h2>Create</h2>
+    <form @submit.prevent="postForm">
+
+      <div class="container">
+        <div class="row">
+          
+          <!--User ID Field-->
+          <div class="input-group p-1">
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">User ID</span>
+            </div>
+            <input class="form-control" v-model="item.user_id" name="user_id" placeholder="user_id">
+          </div>
+
+
+          <!--Keywords Field-->
+          <div class="input-group p-1">
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">Keywords</span>
+            </div>
+            <input class="form-control" v-model="item.keywords" name="keywords" placeholder="keywords">
+          </div>
+
+          <!--Description Field-->
+          <div class="input-group p-1">
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
+            </div>
+            <input type="text" class="form-control" v-model="item.description" name="description" placeholder="description">
+          </div>
+
+          <!--Image Field-->
+          <div class="input-group p-1">
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">Image</span>
+            </div>
+            <input class="form-control" v-model="item.image" name="image" placeholder="image">
+          </div>
+
+          <!--Latitude AND Longitude Fields-->
+          <div class="input-group p-1">
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">Latitude</span>
+            </div>
+            <input class="form-control" v-model="item.lat" name="lat" placeholder="lat">
+
+            <div class="input-group-prepend col-2"> 
+              <span class="input-group-text" id="inputGroup-sizing-default">Longitude</span>
+            </div>  
+            <input class="form-control" v-model="item.lon" name="lon" placeholder="lon">
+          </div>
+
+          <!--Button-->
+          <div class="mb-4 text-center">
+            <button class="btn btn-primary" data-action="create_item">Create Item</button>
+          </div>
+
+        </div>
+      </div>
+
+    </form>
+
+    <h2>Items</h2>
+    <ul>
+      <li v-for="item of list">
+        <div class="card-group m-5" style="width: 350px;">
+            <div class="card">
+                <img :src="item.image" class="card-img-top">
+                <div class="card-body p-2">
+                    <div class="card-title h3"><span data-field="id">ID: {{item.id}}</span></div>
+                    <div class="card-title h4"><span data-field="user_id">User ID: {{item.user_id}}</span></div>
+                    <div class="card-text h5"><span data-field="keywords">Keywords: {{item.keywords}}</span></div>
+                    <div class="card-text text-body-secondary"><span data-field="description">Description: {{item.description}}</span></div>
+                    <div class="card-text h5 text-body-secondary"><span data-field="lat">Latitude: {{item.lat}}</span></div>
+                    <div class="card-text h5 text-body-secondary"><span data-field="lat">Longitude: {{item.lon}}</span></div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-danger" data-action="delete" @click="deleteItem(item.id)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </li>
+    </ul>
+    
+  </div>
+
+  <script type="module">
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
+
+    if (!urlAPI) 
+    {
+      const missingItem = document.createElement('h1')
+      missingItem.textContent = "You are Missing the `?api=` stuff in the URL DUMMKOPF"
+      document.body.append(missingItem)
+    }
+
+    import { createApp } from 'vue'
+    
+    createApp(
+      {
+        data() {return {
+          message: 'Hello Vue!',
+          item: {user_id: '', keywords: '', description: '', image: '', lat: '', lon: ''},
+          //seperate keywords
+          list: [1,2,3],
+        }},
+
+        created() {
+            this.clearForm()
+            this.getItems()
+          },
+
+        methods: {
+          clearForm(){
+            console.log("Form Cleared!")
+            this.item.user_id = ''
+            this.item.keywords = ''
+            this.item.description = ''
+            this.item.image = ''
+            this.item.lat = ''
+            this.item.lon = ''
+          },
+
+        postForm() {
+          //console.log(this.item)
+          fetch(`${urlAPI}/item`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.item),
+          })
+          .then(response => response.json())
+          .then(json => console.log('posted stuff', json))
+          .then(() => this.clearForm())
+          .then(() => this.getItems())
+          .catch(err => console.error(err));
+        },
+
+        getItems() {
+          fetch(`${urlAPI}/items`, {
+            method: 'GET',
+          })
+
+          .then(response => response.json())
+          .then(json => {
+            console.log("Getting Items!", json)
+            this.list = [...json]  // save the json we got back into the variable `items`
+          })
+          .catch(err => console.error(err))
+        },
+
+        deleteItem(id) {
+          //console.log(this.item)
+
+          fetch(`${urlAPI}/item/${id}`, {
+              method: 'DELETE',
+          })
+          //.then(json => console.log('item deleted', json))
+          .then(json => console.log('deleteItem()', json))
+          .then(() => this.getItems())
+          .catch(err => console.error(err));
+        },
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
+
