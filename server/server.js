@@ -47,10 +47,11 @@ let items =
 ]
 
 app.post('/item', (req, res) => {
-  const date_from = new Date().toISOString();
-  const date_to = new Date().toISOString();
+  
+  const dateFrom = new Date().toISOString();
+  const dateTo = new Date().toISOString();
 
-  if (!data.user_id || !data.keywords || !data.description || !data.lat || !data.lon)
+  if (!req.body.user_id || !req.body.keywords || !req.body.description || !req.body.lat || !req.body.lon)
 
   {
     console.log("405 Method Not Allowed")
@@ -58,8 +59,8 @@ app.post('/item', (req, res) => {
   }
   else
   {
-    req.body['Date_From'] = date_from;
-    req.body['Date_To'] = date_to;
+    req.body['Date_From'] = dateFrom;
+    req.body['Date_To'] = dateTo;
 
     const inputFields = 
     {
@@ -80,11 +81,11 @@ app.post('/item', (req, res) => {
   }
 })
 
-
 app.get('/items', (req, res) => {
-  res.json(items)
   console.log("GET items")
+  return res.status(200).json(items)
 })
+
 app.get('/item/:id', (req, res) => {
   for (let i of items)
   {
@@ -96,6 +97,7 @@ app.get('/item/:id', (req, res) => {
   }
   return res.status(404).json({message: "Not Found"});
 })
+
 app.delete('/item/:id', (req, res) => {
   const itemId = parseFloat(req.params.id);
   const itemIndex = items.findIndex(item => item.id === itemId);
@@ -110,7 +112,9 @@ app.delete('/item/:id', (req, res) => {
     return res.status(204).json();
   }
 })
+
 app.listen(port, () => {
   console.log(`server.js listening on port ${port}`)
 })
+
 process.on('SIGINT', function() {process.exit()})
