@@ -51,7 +51,7 @@ app.post('/item', (req, res) => {
   const dateFrom = new Date().toISOString();
   const dateTo = new Date().toISOString();
 
-  if (!req.body.user_id || !req.body.keywords || !req.body.description || !req.body.lat || !req.body.lon)
+  if (!req.body.user_id || !req.body.lat || !req.body.lon || !req.body.keywords || !req.body.description)
 
   {
     console.log("405 Method Not Allowed")
@@ -66,11 +66,11 @@ app.post('/item', (req, res) => {
     {
       "id": Math.floor(Math.random()*100),
       "user_id": req.body.user_id,
-      "keywords": req.body.keywords,
-      "description": req.body.description,
-      "image": req.body.image,
       "lat": req.body.lat,
       "lon": req.body.lon,
+      "image": req.body.image,
+      "keywords": req.body.keywords,
+      "description": req.body.description,
       "date_from": req.body['Date_From'],
       "date_to": req.body['Date_To'],
     };

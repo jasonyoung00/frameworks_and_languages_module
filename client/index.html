@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client</title>
+    <title>I am the Client page</title>
 
     <nav>
         <h1>Freecycle</h1>
@@ -28,7 +28,7 @@
           <input v-model="item.image" name="image" placeholder="image">
           <input v-model="item.keywords" name="keywords" placeholder="keywords">
           <textarea v-model="item.description" name="description" placeholder="description"></textarea>
-          <button data-action="create_item">Create Item</button>
+          <button data-action="create_item">Create This Item</button>
         </form>
 
         <h2>Items</h2>
@@ -36,12 +36,12 @@
             <li v-for="item of list">
                 <img :src="item.image">
                 <span data-field="id"> {{item.id}} </span>
-                <span data-field="lat"> {{item.lat}} </span>
                 <span data-field="user_id"> {{item.user_id}} </span>
-                <span data-field="description"> {{item.description}} </span>
-                <span data-field="keywords"> {{item.keyword}} </span>
+                <span data-field="lat"> {{item.lat}} </span>
                 <span data-field="lon"> {{item.lon}} </span>
-                <button data-action="delete" @click="deleteItem(item.id)">Delete</button>
+                <span data-field="keywords"> {{item.keyword}} </span>
+                <span data-field="description"> {{item.description}} </span>
+                <button data-action="delete" @click="deleteItem(item.id)">Delete This Item</button>
             </li>
         </ul>
     </div>
@@ -55,7 +55,7 @@
           {
             data() {return {
                 message: 'Hello Vue!',
-                item: {user_id: '', keywords: '', description: '', image: '', lat: '', lon: ''},
+                item: {user_id: '', lat: '', lon: '', image: '', keywords: '', description: ''},
                 list: [1,2,3],
                 }},
 
@@ -72,10 +72,10 @@
                         console.log("Cleared the Form")
                         this.item.image = ''
                         this.item.user_id = ''
-                        this.item.description = ''
-                        this.item.keywords = ''
                         this.item.lat = ''
                         this.item.lon = ''
+                        this.item.keywords = ''
+                        this.item.description = ''
                     },
 
 
