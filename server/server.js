@@ -10,7 +10,7 @@ app.use(cors())
 
 app.get('/', (req, res) => {
   //res.send('Server Working!')
-  res.sendFile('client.html', {root: __dirname})
+  res.sendFile('client.html', {root: __dirname}) //get the file client.html and send it to the client page
   res.status(200)
   //console.log("200 OK");
 })
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   }
 };*/
 
-let items =
+let items = //example data. will display up when client/server is running
 [
   {
     "id": 0,
@@ -48,23 +48,23 @@ let items =
 
 app.post('/item', (req, res) => {
   
-  const dateFrom = new Date().toISOString();
+  const dateFrom = new Date().toISOString(); //creates new JavaScript Date object representing current date/time, then converts to string in ISO 8601 format, stored in the "dateFrom" variable
   const dateTo = new Date().toISOString();
 
-  if (!req.body.user_id || !req.body.lat || !req.body.lon || !req.body.keywords || !req.body.description)
+  if (!req.body.user_id || !req.body.lat || !req.body.lon || !req.body.keywords || !req.body.description) //validates the inputs, if any fields are missing then 405 Method Not Allowed 
 
   {
-    console.log("405 Method Not Allowed")
-    res.status(405).json({ error: "Missing Fields" });
+    console.log("405 Method Not Allowed") //shows 405 Method Not Allowed in the console/terminal
+    res.status(405).json({ error: "Missing Fields" }); //"res" - response object in Express.js | "status(405)" - Sets HTTP status code to 405 (Method Not Allowed) | "json({ error: "Missing Fields" })" - Sends JSON response with specified error message.
   }
   else
   {
-    req.body['Date_From'] = dateFrom;
+    req.body['Date_From'] = dateFrom; //"Date_From" property set in "req.body" to the value of "dateFrom"
     req.body['Date_To'] = dateTo;
 
     const inputFields = 
     {
-      "id": Math.floor(Math.random()*100),
+      "id": Math.floor(Math.random()*100), //generates random decimal between 0 and 1, multiply by 100, then uses math.floor on the result to get an integer
       "user_id": req.body.user_id,
       "lat": req.body.lat,
       "lon": req.body.lon,
@@ -75,7 +75,7 @@ app.post('/item', (req, res) => {
       "date_to": req.body['Date_To'],
     };
 
-    items.push(inputFields)
+    items.push(inputFields) //".push" used to add one or more elements from "inputFields" to "items"
     console.log("200 OK")
     return res.status(201).json(inputFields)
   }
@@ -83,11 +83,11 @@ app.post('/item', (req, res) => {
 
 app.get('/items', (req, res) => {
   console.log("GET items")
-  return res.status(200).json(items)
+  return res.status(200).json(items) //returns all elements from "items"
 })
 
 app.get('/item/:id', (req, res) => {
-  for (let i of items)
+  for (let i of items) //iterates through "items", if the "id" matches the one inputted, then return that id stored in "i"
   {
     if (i.id == req.params.id)
     {
@@ -99,15 +99,16 @@ app.get('/item/:id', (req, res) => {
 })
 
 app.delete('/item/:id', (req, res) => {
-  const itemId = parseFloat(req.params.id);
-  const itemIndex = items.findIndex(item => item.id === itemId);
+  const itemId = parseFloat(req.params.id); //converts "id" parameter from the URL to floating-point number and store in "itemId" variable
+  const itemIndex = items.findIndex(item => item.id === itemId); //using "findIndex" method to locate the index of an item in "items" 
+  
   if (itemIndex === -1) 
   {
-    return res.status(404).json({message: 'Item Not Found'});
+    return res.status(404).json({message: 'Item Not Found'}); //if the item to be deleted doesn't exist then 404 returned
   }
   else
   {
-    items.splice(itemIndex, 1)
+    items.splice(itemIndex, 1) //".splice" used to remove one element from "items" at specified index "itemIndex"
     console.log("204 No Content")
     return res.status(204).json();
   }

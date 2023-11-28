@@ -22,12 +22,12 @@
       <div id="app">
         <h2>Create</h2>
         <form @submit.prevent="postForm">
-          <input v-model="item.user_id" name="user_id" placeholder="user_id">
-          <input v-model="item.lat" name="lat" placeholder="lat">
-          <input v-model="item.lon" name="lon" placeholder="lon">
-          <input v-model="item.image" name="image" placeholder="image">
-          <input v-model="item.keywords" name="keywords" placeholder="keywords">
-          <textarea v-model="item.description" name="description" placeholder="description"></textarea>
+          <input v-model="item.user_id" name="user_id" placeholder="UserID">
+          <input v-model="item.lat" name="lat" placeholder="Latitude">
+          <input v-model="item.lon" name="lon" placeholder="Longitude">
+          <input v-model="item.image" name="image" placeholder="Image URL">
+          <input v-model="item.keywords" name="keywords" placeholder="Keywords">
+          <textarea v-model="item.description" name="description" placeholder="Description"></textarea>
           <button data-action="create_item">Create This Item</button>
         </form>
 
@@ -77,7 +77,6 @@
                         this.item.keywords = ''
                         this.item.description = ''
                     },
-
 
                     postForm() {
                         fetch(`${urlAPI}/item`, {
