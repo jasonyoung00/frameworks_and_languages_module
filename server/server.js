@@ -38,7 +38,7 @@ let items = //example data. will display up when client/server is running
       "tools"
     ],
     "description": "A hammer and nails set",
-    "image": "https://placekitten.com/200/300",
+    "image": "https://media.tenor.com/-kE-DrPekq8AAAAd/drachenlord-sunglasses.gif",
     "lat": 51.2798438,
     "lon": 1.0830275,
     "date_from": "2023-10-23T13:13:05.200Z",

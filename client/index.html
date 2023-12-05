@@ -3,110 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>I am the Client page</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css">
+    
     <nav>
-        <h1 class="title">FreeCycle</h1>
+        <h1 class="title is-1 has-text-white"><center>FreeCycle</center></h1>
         <br>
     </nav>
 </head>
-<body>
+
+<body class="has-background-black">
     <script type="importmap">
         {
-          "imports": 
-          {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-          }
+            "imports":
+            {
+                "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+            }
         }
-      </script>
-      
-      <div id="app">
-        <h2 class="subtitle">Create</h2>
-        <form @submit.prevent="postForm">
-            <div class="field">
-                <div class="control">
-                    <input class="textarea is-success" v-model="item.user_id" type="user_id" placeholder="UserID" rows="1">
-                </div>
-            </div>
+    </script>
+    
+    <div id="app">
+        <div class="mx-6">
+            <h2 class="subtitle is-2 has-text-white">Create</h2>
             
-            <div class="field">
-                <div class="control">
-                    <input class="textarea is-success" v-model="item.lat" name="lat" placeholder="Latitude" rows="1">
+            <form @submit.prevent="postForm">
+                <div class="field">
+                    <div class="control">
+                        <input class="input is-success is-rounded" v-model="item.user_id" type="user_id" placeholder="UserID" rows="1">
+                    </div>
                 </div>
-            </div>
-              
-              <div class="field">
-                <div class="control">
-                  <input class="textarea is-success" v-model="item.lon" name="lon" placeholder="Longitude" rows="1">
-                </div>
-              </div>
-              
-              <div class="field">
-                <div class="control">
-                    <input class="textarea is-success" v-model="item.image" name="image" placeholder="Image URL" rows="1">
-                </div>
-              </div>
-              
-              <div class="field">
-                <div class="control">
-                    <input class="textarea is-success" v-model="item.keywords" name="keywords" placeholder="Keywords" rows="1">
-                </div>
-              </div>
-              
-              <div class="field">
-                <div class="control">
-                    <textarea class="textarea is-success" v-model="item.description " name="description" placeholder="Description" rows="5"></textarea>
-                </div>
-              </div>
                 
-              <button class="button is-medium is-success is-outlined is-rounded">
-                    <span class="icon is-small">
-                        <i class="fas fa-check"></i>
-                      </span>
-                      <span>Save</span>
-                </button>
-        </form>
-
-        <h2 class="subtitle">Items</h2>
-        <ul>
-            <li v-for="item of list">
-
-                <figure class="image is-128x128">
-                    <img class="is-rounded" :src="item.image">
-                </figure>
+                <div class="field">
+                    <div class="control">
+                        <input class="input is-success is-rounded" v-model="item.lat" name="lat" placeholder="Latitude" rows="1">
+                    </div>
+                </div>
                 
-                <div class="box">
-                    <span data-field="id"> {{item.id}} </span>
+                <div class="field">
+                    <div class="control">
+                    <input class="input is-success is-rounded" v-model="item.lon" name="lon" placeholder="Longitude" rows="1">
+                    </div>
                 </div>
+                
+                <div class="field">
+                    <div class="control">
+                        <input class="input is-success is-rounded" v-model="item.image" name="image" placeholder="Image URL" rows="1">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <div class="control">
+                        <input class="input is-success is-rounded" v-model="item.keywords" name="keywords" placeholder="Keywords" rows="1">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea is-success is-rounded" v-model="item.description " name="description" placeholder="Description" rows="5"></textarea>
+                    </div>
+                </div>
+                
+                <button class="button is-medium is-success is-outlined is-rounded ">
+                    ✔ Save
+                    </button>
+            </form>
 
-                <div class="box">
-                    <span data-field="user_id"> {{item.user_id}} </span>
-                </div>
-                <div class="box">
-                    <span data-field="lat"> {{item.lat}} </span>
-                </div>
+            <hr>
 
-                <div class="box">
-                    <span data-field="lon"> {{item.lon}} </span>
-                </div>
+            <h2 class="subtitle is-2 has-text-white">Items</h2>
 
-                <div class="box">
-                    <span data-field="keywords"> {{item.keywords}} </span>
-                </div>
+            <ul>
+                <li v-for="item of list">
 
-                <div class="box">
-                    <span data-field="description"> {{item.description}} </span>
-                </div>
+                    <figure class="image is-128x128">
+                        <img class="is-rounded" :src="item.image">
+                    </figure>
+                    
+                    <div class="brick has-text-white">
+                        <span data-field="id"> {{item.id}} </span>
+                    </div>
 
-                <button class="button is-medium is-danger is-outlined is-rounded" @click="deleteItem(item.id)">
-                    <span>Delete</span>
-                    <span class="icon is-small">
-                        <i class="fas fa-times"></i>
-                    </span>
-                </button>
-            </li>
-        </ul>
+                    <div class="brick has-text-white">
+                        <span data-field="user_id"> {{item.user_id}} </span>
+                    </div>
+                    <div class="brick has-text-white">
+                        <span data-field="lat"> {{item.lat}} </span>
+                    </div>
+
+                    <div class="brick has-text-white">
+                        <span data-field="lon"> {{item.lon}} </span>
+                    </div>
+                    <div class="brick has-text-white">
+                        <span data-field="keywords"> {{item.keywords}} </span>
+                    </div>
+
+                    <div class="brick has-text-white">
+                        <span data-field="description"> {{item.description}} </span>
+                    </div>
+
+                    <br>
+
+                    <button class="button is-medium is-danger is-outlined is-rounded" @click="deleteItem(item.id)">
+                        ✖ Delete
+                    </button>
+
+                    <br>
+                    <hr>
+                </li>
+            </ul>
+        </div>
     </div>
 
       <script type="module">
