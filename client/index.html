@@ -6,16 +6,29 @@
 
     <title>I am the Client page</title>
 
+    <!-- layout framework (independent) - https://bulma.io/documentation/ -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css">
     
-    <nav>
-        <h1 class="title is-1 has-text-white"><center>FreeCycle</center></h1>
-        <br>
-    </nav>
+    <nav class="navbar is-size-1 has-text-black is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-start">
+            FreeCycle
+        </div>
+        <a class="navbar-item has-text-black">
+            About
+        </a>
+        <a class="navbar-item has-text-black">
+            Docs
+        </a>
+        <a class="navbar-item has-text-black">
+            Report Issue
+        </a>
+      </nav>
 </head>
 
 <body class="has-background-black">
+    <!-- https://stackoverflow.com/questions/47682110/bulma-icon-not-showing-up -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
     <script type="importmap">
         {
             "imports":
@@ -27,12 +40,12 @@
     
     <div id="app">
         <div class="mx-6">
-            <h2 class="subtitle is-2 has-text-white">Create</h2>
+            <h2 class="subtitle is-2 has-text-primary">Create</h2>
             
             <form @submit.prevent="postForm">
                 <div class="field">
                     <div class="control">
-                        <input class="input is-success is-rounded" v-model="item.user_id" type="user_id" placeholder="UserID" rows="1">
+                        <input class="input is-success is-rounded" v-model="item.user_id" name="user_id" type="user_id" placeholder="UserID" rows="1">
                     </div>
                 </div>
                 
@@ -67,13 +80,17 @@
                 </div>
                 
                 <button class="button is-medium is-success is-outlined is-rounded ">
-                    ✔ Save
+                    <!-- ✔ Save -->
+                    <span class="icon is-small">
+                        <i class="fas fa-check"></i>
+                      </span>
+                      <span>Save</span>
                     </button>
             </form>
 
             <hr>
 
-            <h2 class="subtitle is-2 has-text-white">Items</h2>
+            <h2 class="subtitle is-2 has-text-primary">Items</h2>
 
             <ul>
                 <li v-for="item of list">
@@ -82,38 +99,50 @@
                         <img class="is-rounded" :src="item.image">
                     </figure>
                     
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="id"> {{item.id}} </span>
                     </div>
 
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="user_id"> {{item.user_id}} </span>
                     </div>
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="lat"> {{item.lat}} </span>
                     </div>
 
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="lon"> {{item.lon}} </span>
                     </div>
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="keywords"> {{item.keywords}} </span>
                     </div>
 
-                    <div class="brick has-text-white">
+                    <div class="brick has-text-primary">
                         <span data-field="description"> {{item.description}} </span>
                     </div>
 
                     <br>
 
                     <button class="button is-medium is-danger is-outlined is-rounded" @click="deleteItem(item.id)">
-                        ✖ Delete
+                        <!-- ✖ Delete -->
+                        <span>Delete</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-times"></i>
+                        </span>
                     </button>
 
                     <br>
                     <hr>
                 </li>
             </ul>
+            <footer class="footer has-background-primary">
+                <div class="content has-text-centered">
+                  <p>
+                    Using Bulma Layout Framework. By <strong>Jason Young.</strong> Code attained from
+                    <a href="https://bulma.io/documentation/layout/footer/">Bulma Documentation</a>.
+                  </p>
+                </div>
+              </footer>
         </div>
     </div>
 
