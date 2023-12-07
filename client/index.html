@@ -45,7 +45,7 @@
             <form @submit.prevent="postForm">
                 <div class="field">
                     <div class="control">
-                        <input class="input is-success is-rounded" v-model="item.user_id" name="user_id" type="user_id" placeholder="UserID" rows="1">
+                        <input name="user_id" class="input is-success is-rounded" v-model="item.user_id" placeholder="UserID" rows="1">
                     </div>
                 </div>
                 
@@ -123,13 +123,13 @@
 
                     <br>
 
-                    <button class="button is-medium is-danger is-outlined is-rounded" @click="deleteItem(item.id)">
+                    <button data-action="delete" class="button is-medium is-danger is-outlined is-rounded" @click="deleteItem(item.id)">
                         <!-- ✖ Delete -->
                         <span>Delete</span>
                         <span class="icon is-small">
                             <i class="fas fa-times"></i>
                         </span>
-                    </button>
+                    </button> 
 
                     <br>
                     <hr>
