@@ -76,7 +76,7 @@ app.post('/item', (req, res) => {
     };
 
     items.push(inputFields) //".push" used to add one or more elements from "inputFields" to "items"
-    console.log("200 OK")
+    console.log("201 Created")
     return res.status(201).json(inputFields)
   }
 })
