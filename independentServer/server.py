@@ -5,6 +5,14 @@ import json
 import datetime
 import random
 
+class StaticResource(object):
+    def on_get(self, req, resp, filename):
+        # do some sanity check on the filename
+        resp.status = falcon.HTTP_200
+        resp.content_type = 'appropriate/content-type'
+        with open('client.html', 'r') as f:
+            resp.body = f.read()
+
 # example data. will display up when client/server is running
 Items = [
     {
@@ -77,7 +85,24 @@ class GetItemResource:
                 break
             else:
                 resp.status = falcon.HTTP_404
-                resp.media = ("404 Not Found") 
+                resp.media = ("404 Not Found")
+
+    def on_delete(self, req, resp, id):
+        idOfItem = int(id)
+
+        # https://www.geeksforgeeks.org/enumerate-in-python/
+        # https://stackoverflow.com/a/51403623
+        for index, item in enumerate(Items):
+            if item['id'] == idOfItem:
+                q = index
+                break
+        if q == None:
+            resp.status = falcon.HTTP_404
+            resp.media = ("404 Not Found")
+        else:
+            # https://www.mygreatlearning.com/blog/remove-item-from-list-python/#:~:text=remove()%3A%20remove()%20is,to%20remove%20from%20the%20list_name
+            Items.pop(q)
+            resp.status = falcon.HTTP_204
 
 
 # falcon.App instances are callable WSGI apps
@@ -85,11 +110,13 @@ class GetItemResource:
 app = falcon.App()
 
 # Resources are represented by long-lived class instances
+home = StaticResource()
 post = PostItemResource()
 getItems = GetItemsResource()
 getItem = GetItemResource()
 
 # things will handle all requests to the '/things' URL path
+app.add_route('/', home)
 app.add_route('/item', post)
 app.add_route('/items', getItems)
 app.add_route('/item/{id}', getItem)
