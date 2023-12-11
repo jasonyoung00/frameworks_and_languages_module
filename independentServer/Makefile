@@ -1,7 +1,7 @@
 DOCKER_IMAGE:=server
 
 run_local:
-    python falconServer.py
+    python server.py
 
 build:
     docker build --tag independentServer .

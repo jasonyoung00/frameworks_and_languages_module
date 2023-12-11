@@ -60,15 +60,39 @@ class PostItemResource:
             resp.status = falcon.HTTP_201 #
             #resp.text = ("201 Created")
 
+class GetItemsResource:
+    def on_get(self, req, resp):
+
+        resp.media = Items
+        resp.status = falcon.HTTP_200
+
+class GetItemResource:
+    def on_get(self, req, resp, id):
+        idOfItem = int(id)
+
+        for i in Items:
+            if i['id'] == idOfItem:
+                resp.media = i
+                resp.status = falcon.HTTP_200
+                break
+            else:
+                resp.status = falcon.HTTP_404
+                resp.media = ("404 Not Found") 
+
+
 # falcon.App instances are callable WSGI apps
 # in larger applications the app is created in a separate file
 app = falcon.App()
 
 # Resources are represented by long-lived class instances
 post = PostItemResource()
+getItems = GetItemsResource()
+getItem = GetItemResource()
 
 # things will handle all requests to the '/things' URL path
 app.add_route('/item', post)
+app.add_route('/items', getItems)
+app.add_route('/item/{id}', getItem)
 
 if __name__ == '__main__':
     with make_server('', 8000, app) as httpd:

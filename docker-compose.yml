@@ -4,7 +4,8 @@ services:
 
   server:
     build:
-      context: ./server/
+      # context: ./server/
+      context: ./independentServer/
     expose:
       - 8000
     ports:
