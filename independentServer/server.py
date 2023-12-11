@@ -1,15 +1,26 @@
-from wsgiref.simple_server import make_server
-
 import falcon
 import json
 import datetime
 import random
+from falcon_cors import CORS # Falcon CORS middleware imported: https://github.com/lwcolton/falcon-cors
+from wsgiref.simple_server import make_server # WSGI server imported
+
+cors = CORS(
+    allow_all_origins=True,
+    allow_all_headers=True,
+    allow_all_methods=True,
+)
+
 
 class StaticResource(object):
-    def on_get(self, req, resp, filename):
-        # do some sanity check on the filename
+    def on_options(self, req, resp):
+        resp.status = falcon.HTTP_204
+        resp.set_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS') 
+
+    def on_get(self, req, resp):
         resp.status = falcon.HTTP_200
-        resp.content_type = 'appropriate/content-type'
+        resp.content_type = 'text/html'
+        # get the file client.html and send it to the client page
         with open('client.html', 'r') as f:
             resp.body = f.read()
 
@@ -69,8 +80,10 @@ class PostItemResource:
             #resp.text = ("201 Created")
 
 class GetItemsResource:
-    def on_get(self, req, resp):
+    def on_options(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*') # Set the header to allow GET, POST, OPTIONS methods, https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
 
+    def on_get(self, req, resp):
         resp.media = Items
         resp.status = falcon.HTTP_200
 
@@ -89,25 +102,27 @@ class GetItemResource:
 
     def on_delete(self, req, resp, id):
         idOfItem = int(id)
+        indexToDelete = None
 
         # https://www.geeksforgeeks.org/enumerate-in-python/
         # https://stackoverflow.com/a/51403623
         for index, item in enumerate(Items):
             if item['id'] == idOfItem:
-                q = index
+                indexToDelete = index
                 break
-        if q == None:
+        if indexToDelete == None:
             resp.status = falcon.HTTP_404
             resp.media = ("404 Not Found")
         else:
             # https://www.mygreatlearning.com/blog/remove-item-from-list-python/#:~:text=remove()%3A%20remove()%20is,to%20remove%20from%20the%20list_name
-            Items.pop(q)
+            Items.pop(indexToDelete)
             resp.status = falcon.HTTP_204
 
 
 # falcon.App instances are callable WSGI apps
 # in larger applications the app is created in a separate file
-app = falcon.App()
+#app = falcon.App()
+app = falcon.App(middleware=[cors.middleware])
 
 # Resources are represented by long-lived class instances
 home = StaticResource()
