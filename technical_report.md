@@ -1,6 +1,6 @@
 Technical Report
 ================
-
+This technical report is to convey information in a clear, concise and easily accessible format. It is divided into sections detailing issues, features and recommendations of which frameworks are best to solve a given problem. Furthermore, issues found with both server and client frameworks showing the limits of each framework used are shown and elaborated on and features of said frameworks and the problem they are trying to solve are divulged with the benefits of a framework's features are stated. Recommendations of frameworks and why they should be used in regards to what the features of a framework do and what framework to use to avoid the stated issues.
 (intro describing purpose of report - 200ish words)
 
 
@@ -37,7 +37,7 @@ let items =
 
 (Explain why this pattern is problematic - 40ish words)
 
-Instead of having the items in a list, put them in a dictionary. A dictionary stores every entry with a key and a value. This makes searching for a single value much more efficient as all the entries in that dictionary is indexed. Whereas with a list, the entires are not indexed making the searching process much resource intensive.
+Instead of having the items in a list, putting them in a dictionary will store every entry with a key and a value. This makes searching for a single value much more efficient as all the entries in that dictionary is indexed. Whereas with a list, the entires are not indexed making the searching process much resource intensive.
 
 ### (name of Issue 2)
 
