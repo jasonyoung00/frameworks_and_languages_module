@@ -8,84 +8,26 @@ Critique of Server/Client prototype
 ---------------------
 
 ### Overview
-()
+()why the example server/client is bad. why using framework instead will be good/better.
+below are some issues with said prototype (example_server & example_client)
 
-### (name of Issue 1)
+### Error Handling
 
 (A code snippet example demonstrating the issue)
 ```python
-def serve_app(func_app, port, host=''):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((host, port))
-        while True:
-            s.listen()
-            try:
-                conn, addr = s.accept()
-            except KeyboardInterrupt as ex:
-                break
-            with conn:
-                #log.debug(f'Connected by ')
-                #while True:
-                    data = conn.recv(65535)  # If the request does not come though in a single recv/packet then this server will fail and will not composit multiple TCP packets. Sometimes the head and the body are sent in sequential packets. This happens when the system switches task under load.
-                    #if not data: break
-                    try:
-                        request = parse_request(data)
-                    except InvalidHTTPRequest as ex:
-                        log.exception("InvalidHTTPRequest")
-                        continue
-
-                    # HACK: If we don't have a complete message - try to botch another recv - I feel dirty doing this 
-                    # This probably wont work because utf8 decoded data will have a different content length 
-                    # This needs more testing
-                    while int(request.get('content-length', 0)) > len(request['body']):
-                        request['body'] += conn.recv(65535).decode('utf8')
-
-                    try:
-                        response = func_app(request)
-                    except Exception as ex:
-                        log.error(request)
-                        traceback.print_exc()
-                        response = {'code': 500, 'body': f'<PRE>{traceback.format_exc()}</PRE>'}
-                    # TODO: the code and content length do not work here - they are currently applied in encode response.
-                    log.info(f"{addr} - {request.get('path')} - {response.get('code')} {response.get('Content-length')}")
-                    conn.send(encode_response(response))
+return {'code': 404, 'body': 'no route'}
 ```
 (Explain why this pattern is problematic - 40ish words)
-The 'while True' loop in 'serve_app' blocks while waiting for a connection, processing it, and then moving on to the next one. This approach can lead to poor performance, especially in scenarios with a high volume of incoming requests.
+If the incoming request does not match, the error message will always be a 404 regardless if it is or isn't. This will make bug fixing difficult/almost impossible as the developer will not have the necessary information about what is going wrong to fix said error.
 
 ### (name of Issue 2)
 
 (A code snippet example demonstrating the issue)
 ```python
-def parse_request(data):
-    r"""
-    >>> parse_request(b'GET /?key1=value1&key2=value2 HTTP/1.1\r\nHost: localhost:8000\r\nUser-Agent: curl/7.68.0\r\nAccept: */*\r\n\r\n')
-    {'method': 'GET', 'path': '/', 'version': '1.1', 'query': {'key1': 'value1', 'key2': 'value2'}, 'host': 'localhost:8000', 'user-agent': 'curl/7.68.0', 'accept': '*/*', 'body': ''}
-    >>> parse_request(b'Not a http request')
-    Traceback (most recent call last):
-    app.http_server.InvalidHTTPRequest: Not a http request
-    """
-    data = data.decode('utf8')
-    match_header = RE_HTTP_HEADER.search(data)
-    if not match_header:
-        log.error(data)
-        raise InvalidHTTPRequest(data)
-    request = match_header.groupdict()
-    request['query'] = {}
-    path_query = request['path'].split('?', maxsplit=1)
-    if (len(path_query) == 2):
-        request['path'], request['query'] = path_query
-        request['query'] = {k: '|'.join(v) for k,v in urllib.parse.parse_qs(request['query']).items()}
-    for header in RE_HTTP_HEADER_KEY_VALUE.finditer(data):
-        key, value = header.groupdict().values()
-        request[key.lower()] = value
-    request.update(RE_HTTP_BODY.search(data).groupdict())
-    log.debug(request)
-    return request
+
 ```
 (Explain why this pattern is problematic - 40ish words)
-The 'parse_request' function reads the incoming data using a single 'recv' call, which assumes that the entire HTTP request is contained in a single packet. This approach might lead to request smuggling vulnerabilities, especially if the application is deployed in a real-world scenario where requests can be fragmented across multiple packets.
+
 
 ### Recommendation
 (why the existing implementation should not be used - 40ish words)
@@ -95,10 +37,10 @@ The 'parse_request' function reads the incoming data using a single 'recv' call,
 Server Framework Features
 -------------------------
 
-### Request & Response 
+### Request & Response Objects
 
 (Technical description of the feature - 40ish words)
-Falcon employs the inversion of control (IoC) pattern to coordinate with app methods in order to respond to HTTP requests. Resource responders, middleware methods, hooks, etc. receive a reference to the request and response objects that represent the current in-flight HTTP request.
+Falcon responds to HTTP requests by coordinating with app functions using the inversion of control (IoC) technique. The request and response objects that reflect the current in-flight HTTP request are referenced by resource responders, middleware methods, hooks, etc.
 
 (A code block snippet example demonstrating the feature)
 ```python
@@ -111,7 +53,7 @@ def on_get(self, req, resp):
 ```
 
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-minimize confusion and facilitate porting. 
+
 
 (Provide reference urls to your sources of information about the feature - required)
 https://falcon.readthedocs.io/en/stable/api/request_and_response.html
@@ -128,6 +70,7 @@ async def on_websocket(self, req: Request, ws: WebSocket, account_id: str):
 ```
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 Although, while the proof of concept is applicable, the WebSocket might run into scalability issues as handling numerous concurrent connections will be difficult with python. Furthermore, using a different approach for applications that have a larger scale would be handled without as many concurrent connection problems. 
+
 (Provide reference urls to your sources of information about the feature - required)
 https://falcon.readthedocs.io/en/stable/api/websocket.html
 
@@ -143,7 +86,7 @@ https://falcon.readthedocs.io/en/stable/api/websocket.html
 Server Language Features
 -----------------------
 
-### (name of Feature 1)
+### (Feature 1)
 
 (Technical description of the feature - 40ish words)
 (A code block snippet example demonstrating the feature)
@@ -151,7 +94,7 @@ Server Language Features
 (Provide reference urls to your sources of information about the feature - required)
 
 
-### (name of Feature 2)
+### (Feature 2)
 
 (Technical description of the feature - 40ish words)
 (A code block snippet example demonstrating the feature)
@@ -163,18 +106,31 @@ Server Language Features
 Client Framework Features
 -------------------------
 
-### (name of Feature 1)
+### v-for
 
 (Technical description of the feature - 40ish words)
+Render a list based on an array."item of list" is used, where "list" is the source data array and item is an alias for the array element being iterated on. 
+
 (A code block snippet example demonstrating the feature)
+```javascript
+v-for="item of list"
+```
+
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 (Provide reference urls to your sources of information about the feature - required)
+https://vuejs.org/guide/essentials/list
 
 
-### (name of Feature 2)
+### Component v-model
 
 (Technical description of the feature - 40ish words)
+
+
 (A code block snippet example demonstrating the feature)
+```javascript
+v-model="item.user_id"
+```
+
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 (Provide reference urls to your sources of information about the feature - required)
 
@@ -190,10 +146,13 @@ Client Framework Features
 Client Language Features
 ------------------------
 
-### (name of Feature 1)
+### Client-Side Validations
 
 (Technical description of the feature - 40ish words)
+As with nearly every website, users will have a form where values will need to be inputted. This feature verifies that the value entered is correct. 
+
 (A code block snippet example demonstrating the feature)
+
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 (Provide reference urls to your sources of information about the feature - required)
 
