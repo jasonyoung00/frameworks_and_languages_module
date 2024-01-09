@@ -7,8 +7,7 @@ Critique of Server/Client prototype
 ---------------------
 
 ### Overview
-()why the example server/client is bad. why using framework instead will be good/better.
-below are some issues with said prototype (example_server & example_client)
+Below shows two issues with the Server and the Client prototype. It was created without a framework in mind. 
 
 ### Error Handling
 ```python
@@ -16,19 +15,19 @@ return {'code': 404, 'body': 'no route'}
 ```
 If the incoming request does not match, the error message will always be a 404 regardless if it is or isn't. This will make bug fixing difficult/almost impossible as the developer will not have the necessary information about what is going wrong to fix said error.
 
-### DOM Manipulation & State Management (Manuel)
-```python
-
+### Manual State Management
 ```
-(Explain why this pattern is problematic - 40ish words)
-makes the code less readable and maintainable
+let counterValue = 0;
+
+    // Function to update the counter value in the UI
+    function updateCounter() {
+      document.getElementById('counter').innerText = counterValue;
+    }
+```
+Manual state management can give more control and flexibility to the developer, but also requires them to write more code and handle various aspects of state management manually, which can lead to increased complexity and potential for errors. If a framework was used there are tools and libraries that handle the state management automatically. For example, Vue.js provide mechanisms for managing component state and updating the user interface in response to changes in that state.
 
 ### Recommendation
-(why the existing implementation should not be used - 40ish words)
-these two are some of the many issues with the proto.
-
-(suggested direction - frameworks 40ish words)
-rebuild with frameworks (vuejs n falcon)
+These two are some of the many issues with the prototype. Error Handling in the presented above should not be used as if an error is found then the developer will have less information on fixing said error than if the error handling was done through a framework. Also, Manual State Management, while can be coded by the developer providing more control as they are writing code to track, update, and synchronize the state of different components or the entire application, can cause downsides like having numerous amounts of boilerplate code, the codebase harder to understand and the lack of developer tools to inspect and debug the application state. Vuejs can offer fixes to both of these issues. Vue.js utilizes a reactive system, where data properties in a component are automatically tracked for changes.
 
 Server Framework Features
 -------------------------
@@ -85,7 +84,7 @@ Python's syntax is designed to be clear and readable, making it easy for develop
 ```python
 print('Hello, World!')
 ```
-Allows developers to express complex code in a clear and straightforward way. Developers can create complex, multi-protocol applications while maintaining concise, readable syntax. However, a downside would be that because python works off of indentation, if a line of code isn't indented properly then the whole program could fail.
+Allows developers to express complex code in a clear and straightforward way. Developers can create complex, multi-protocol applications while maintaining concise, readable syntax. However, a downside would be that because python requires indentation to define statement blocks, if a line of code isn't properly indented then the whole program could fail.
 https://ioflood.com/blog/python-for-beginners/
 https://github.blog/2023-03-02-why-python-keeps-growing-explained/
 
@@ -114,8 +113,7 @@ Declarative rendering in Vue.js simplifies the development process by allowing d
 ```javascript
 const parent = new Vue({ 
     el : '#parent', 
-    data : { 
-      
+    data : {
         // The data that will be 
         // interpolated in the DOM 
         priority1: "vue.js", 
@@ -138,33 +136,59 @@ if (name === '') {
         return false; // Prevent form submission
       }
 ```
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
 It helps improve the user experience by providing instant feedback on input errors and reduces the need for unnecessary server requests.
 https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 
 ### Dynamic Typing
-(Technical description of the feature - 40ish words)
-Dynamic typing in JavaScript refers to the ability of variables to hold values of any data type without explicitly declaring their type.
-
-(A code block snippet example demonstrating the feature)
+Dynamic typing in JavaScript refers to the ability of variables to hold values of any data type without explicitly declaring their type. variable types are determined at runtime rather than during compilation.
 ```javascript
-
+// Variable x starts as a number
+let x = 5;
+console.log(`x is a ${typeof x}:`, x);
+// Now, x becomes a string
+x = "Dynamic Typing Example";
+console.log(`Now, x is a ${typeof x}:`, x);
+// Now is an array
+x = [1, 2, 3];
+console.log(`Now, x is an ${typeof x}:`, x);
 ```
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-
-
-(Provide reference urls to your sources of information about the feature - required)
+Code can be written and the variable types will be determined at runtime allowing developers to quickly iterate and make changes without the need to worry about explicit type declarations facilitating rapid development of a application.
 https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing
+https://dev.to/kozlovzxc/js-interview-in-2-minutes-static-vs-dynamic-typing-2d5k
 
 Conclusions
 -----------
+Frameworks are recommended in software development for their ability to streamline and enhance the development process. They provide a structured and organised foundation, offering pre-established conventions and reusable components that significantly speed up application development. By enforcing best practices and design patterns, frameworks contribute to code consistency, reducing errors, and promoting maintainability. Collaboration among developers is facilitated as frameworks establish a common structure and coding standards, creating a more efficient and cohesive team workflow.
 
-(justify why frameworks are recommended - 120ish words)
-Frameworks are recommended in software development for their ability to streamline and enhance the development process. They provide a structured and organized foundation, offering pre-established conventions and reusable components that significantly expedite application development. By enforcing best practices and design patterns, frameworks contribute to code consistency, reducing errors, and promoting maintainability. Collaboration among developers is facilitated as frameworks establish a common structure and coding standards, fostering a more efficient and cohesive team workflow.
+Moreover, frameworks often come equipped with built-in functionalities, such as security features, testing tools, and database integrations, which not only saves development time but also ensures that applications adhere to industry standards. The abstraction of common tasks allows developers to focus on key features rather than regular implementations. As a result, frameworks contribute to the creation of robust, scalable, and feature-rich applications. Whether it's web development, mobile app development, or other areas of development, frameworks provide a reliable and proven foundation, giving developers the ability to build high-quality software with reduced effort, increased productivity, and improved code maintainability.
 
-Moreover, frameworks often come equipped with built-in functionalities, such as security features, testing tools, and database integrations, which not only save development time but also ensure that applications adhere to industry standards. The abstraction of common tasks allows developers to focus on business logic rather than routine implementations. As a result, frameworks contribute to the creation of robust, scalable, and feature-rich applications. Whether it's web development, mobile app development, or other domains, frameworks provide a reliable and proven foundation, empowering developers to build high-quality software with reduced effort, increased productivity, and improved code maintainability.
 
-(justify which frameworks should be used and why 180ish words)
-Falcon's lightweight design ensures rapid development, making it an ideal choice for projects where performance is critical. Its efficient routing system enables the creation of RESTful APIs with minimal overhead, ensuring low latency and optimal resource utilisation. As well as this, Falcon promotes a resource-oriented architecture, making it easy to structure code around RESTful principles. The framework's simplicity and intuitive syntax contribute to code readability, reducing the learning curve for developers. With a focus on minimalism, Falcon allows for precise control over the request-response lifecycle, enabling developers to fine-tune the said API's behavior.
+**Falcon** - Falcon's lightweight design ensures rapid development, making it an ideal choice for projects where performance is critical. Its efficient routing system enables the creation of RESTful APIs with minimal overhead, ensuring low latency and optimal resource utilisation. As well as this, Falcon promotes a resource-oriented architecture, making it easy to structure code around RESTful principles. The framework's simplicity and intuitive syntax contribute to code readability, reducing the learning curve for developers. With a focus on minimalism, Falcon allows for precise control over the request-response lifecycle, enabling developers to fine-tune the said API's behaviour.
 
-Furthermore, Vuejs's simplicity and ease of integration make it an ideal framework for building interactive and dynamic user interfaces. Vue.js follows a component-based architecture, promoting modular development, code reuse, and easy maintenance. The framework's reactivity system ensures efficient updates to the UI based on changes in data, simplifying state management and enhancing the overall developer experience. Vue.js prides itself excellent performance, thanks to its optimized rendering process and a virtual DOM that minimizes unnecessary updates. Its flexibility enables seamless integration with existing projects, making it a pragmatic choice for incremental adoption. With a robust ecosystem, including Vue Router for navigation and Vuex for state management, Vue.js empowers developers to build scalable and feature-rich applications. Overall, Vue.js strikes a balance between simplicity, flexibility, and performance, making it a preferred framework for modern web development.
+**Vuejs** - Furthermore, Vuejs's simplicity and ease of integration make it an ideal framework for building interactive and dynamic user interfaces. Vue.js follows a component-based architecture, promoting modular development, code reuse, and easy maintenance. The framework's reactivity system ensures efficient updates to the UI based on changes in data, simplifying state management and enhancing the overall developer experience. Vue.js prides itself excellent performance, thanks to its optimized rendering process and a virtual DOM that minimizes unnecessary updates. Its flexibility enables seamless integration with existing projects, making it a pragmatic choice for incremental adoption. With a robust ecosystem, including Vue Router for navigation and Vuex for state management, Vue.js empowers developers to build scalable and feature-rich applications. Overall, Vue.js strikes a balance between simplicity, flexibility, and performance, making it a preferred framework for modern web development.
+
+References
+----------
+DEV Community. (n.d.). JS interview in 2 minutes / Static vs Dynamic typing. [online] Available at: https://dev.to/kozlovzxc/js-interview-in-2-minutes-static-vs-dynamic-typing-2d5k.
+
+developer.mozilla.org. (n.d.). Dynamic typing - MDN Web Docs Glossary: Definitions of Web-related terms | MDN. [online] Available at: https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing.
+
+falcon.readthedocs.io. (n.d.). Request & Response — Falcon 3.1.3 Documentation. [online] Available at: https://falcon.readthedocs.io/en/stable/api/request_and_response.html [Accessed 5 Jan. 2024].
+
+falcon.readthedocs.io. (n.d.). Routing — Falcon 3.1.3 documentation. [online] Available at: https://falcon.readthedocs.io/en/stable/api/routing.html.falcon.
+
+readthedocs.io. (n.d.). WebSocket (ASGI Only) — Falcon 3.1.3 documentation. [online] Available at: https://falcon.readthedocs.io/en/stable/api/websocket.html [Accessed 5 Jan. 2024].
+
+GeeksforGeeks. (2021). Vue.js Declarative Rendering. [online] Available at: https://www.geeksforgeeks.org/vue-js-declarative-rendering/ [Accessed 6 Jan. 2024].
+
+MDN Web Docs. (n.d.). Client-side form validation. [online] Available at: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation.
+
+parthmanchanda81 (2021). Libraries in Python. [online] GeeksforGeeks. Available at: https://www.geeksforgeeks.org/libraries-in-python/.
+
+Ramuglia, G. (2023). Python Language for Beginners: Comprehensive Guide. [online] Linux Dedicated Server Blog. Available at: https://ioflood.com/blog/python-for-beginners/ [Accessed 5 Jan. 2024].
+
+Scarlett, R. (2023). Why Python keeps growing, explained. [online] The GitHub Blog. Available at: https://github.blog/2023-03-02-why-python-keeps-growing-explained/.
+
+vuejs.org. (n.d.). Component v-model | Vue.js. [online] Available at: https://vuejs.org/guide/components/v-model.html.
+
+vuejs.org. (n.d.). Vue.js. [online] Available at: https://vuejs.org/guide/essentials/list [Accessed 6 Jan. 2024].
